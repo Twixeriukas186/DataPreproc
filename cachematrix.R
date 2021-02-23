@@ -1,34 +1,18 @@
-## Put comments here that give an overall description of what your
-## functions do
+cereal1 <- read.csv("cereal1.csv")
+cereal2 <- read.csv("cereal2.csv")
+cereal3 <- read.csv("cereal3.csv")
 
-## Write a short comment describing this function
-makeCacheMatrix <- function(x = matrix()) {
-        m <- NULL
-        set <- function(y) {
-            x <<- y
-            m <<- NULL
-        }
-        get <- function() x
-        setinverse <- function(inverse) m <<- inverse 
-        getinverse <- function() m
-        list(set = set,
-             get = get,
-             setinverse = setinverse,
-             getinverse = getinverse)
-    }
+View(cereal1)
+View(cereal2)
+View(cereal3)
 
-## Write a short comment describing this function
+mergedCereal <- merge(cereal1, cereal2, by.x = "Cereal.name", by.y = "cerealbrand", all = TRUE)
+View(mergedCereal)
+mergedCereal <- merge(mergedCereal, cereal3, by.x = "Cereal.name", by.y = "cerealname", all = TRUE)
+View(mergedCereal)
 
-cacheSolve <- function(x, ...) {
-    ## Return a matrix that is the inverse of 'x'
-    m <- x$getinverse()
-    if (!is.null(m)) {
-        message("getting cached data")
-        return(m)
-    }
-    data <- x$get()
-    m <- solve(data, ...)
-    x$setinverse(m)
-    m
-}
+nrow(mergedCereal)
+is.na(mergedCereal)
 
+MergedCerealNew <- mergedCereal %>% mutate_at(vars(vitamins, sugars),~ifelse(is.na(.x), mean(.x, na.rm = TRUE), .x))
+View(MergedCerealNew)
